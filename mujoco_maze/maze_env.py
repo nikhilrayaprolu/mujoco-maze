@@ -60,7 +60,7 @@ class MazeEnv(gym.Env):
         self._init_positions = [
             (x - torso_x, y - torso_y) for x, y in self._find_all_robots()
         ]
-
+        
         if model_cls.MANUAL_COLLISION:
             if model_cls.RADIUS is None:
                 raise ValueError("Manual collision needs radius of the model")
@@ -344,10 +344,13 @@ class MazeEnv(gym.Env):
         # Samples a new goal
         if self._task.sample_goals():
             self.set_marker()
-        # Samples a new start position
-        if len(self._init_positions) > 1:
-            xy = np.random.choice(self._init_positions)
-            self.wrapped_env.set_xy(xy)
+        def subtraction(x,y):  #function definifion for subtraction
+            sub=x-y
+            return sub
+        import numpy as np
+        xy = [subtraction(i[0], i[1]) for i in zip(self._find_new_robots(), [self._init_torso_x, self._init_torso_y] )]  
+        
+        self.wrapped_env.set_xy(xy)
         return self._get_obs()
 
     def set_marker(self) -> None:
@@ -387,12 +390,26 @@ class MazeEnv(gym.Env):
     def action_space(self):
         return self.wrapped_env.action_space
 
+    def _find_new_robots(self) -> Tuple[float, float]:
+        structure = self._maze_structure
+        size_scaling = self._maze_size_scaling
+        import random
+        while True:
+            i, j = random.choice(range(len(structure))), random.choice(range(len(structure[0])))
+            # print(i, j, len(structure), len(structure[0]))
+        # for i, j in it.product(range(len(structure)), range(len(structure[0]))):
+            if structure[i][j].is_empty():
+                return j * size_scaling, i * size_scaling
+
+        raise ValueError("No robot in maze specification.")
+
     def _find_robot(self) -> Tuple[float, float]:
         structure = self._maze_structure
         size_scaling = self._maze_size_scaling
         for i, j in it.product(range(len(structure)), range(len(structure[0]))):
             if structure[i][j].is_robot():
                 return j * size_scaling, i * size_scaling
+
         raise ValueError("No robot in maze specification.")
 
     def _find_all_robots(self) -> List[Tuple[float, float]]:
