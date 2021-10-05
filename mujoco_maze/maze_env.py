@@ -343,7 +343,6 @@ class MazeEnv(gym.Env):
         return np.concatenate([obs, *view, np.array([self.t * 0.001])])
 
     def reset(self) -> np.ndarray:
-        breakpoint()
         self.t = 0
         self.wrapped_env.reset()
         # Samples a new goal
