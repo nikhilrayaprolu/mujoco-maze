@@ -358,6 +358,8 @@ class MazeEnv(gym.Env):
         xy = [subtraction(i[0], i[1]) for i in zip((start_i, start_j), [self._init_torso_x, self._init_torso_y])]
         xy = [start_i, start_j]
         self.wrapped_env.set_xy(xy)
+        return self._get_obs()
+
 
     def set_goal_pos(self, start_i, start_j):
         from mujoco_maze.maze_task import MazeGoal
