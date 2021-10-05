@@ -343,15 +343,17 @@ class MazeEnv(gym.Env):
         return np.concatenate([obs, *view, np.array([self.t * 0.001])])
 
     def reset(self) -> np.ndarray:
+        breakpoint()
         self.t = 0
         self.wrapped_env.reset()
         # Samples a new goal
-        if self._task.sample_goals():
-            self.set_marker()
+        
+        self.set_marker()
         
         xy = [subtraction(i[0], i[1]) for i in zip(self._find_new_robots(), [self._init_torso_x, self._init_torso_y] )]  
         
         self.wrapped_env.set_xy(xy)
+        self.set_marker()
         return self._get_obs()
     
     def set_start(self, start_i, start_j):
