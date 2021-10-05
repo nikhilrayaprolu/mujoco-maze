@@ -20,9 +20,13 @@ from mujoco_maze.agent_model import AgentModel
 
 # Directory that contains mujoco xml files.
 MODEL_DIR = os.path.dirname(os.path.abspath(__file__)) + "/assets"
-
+def subtraction(x,y):  #function definifion for subtraction
+    sub=x-y
+    return sub
 
 class MazeEnv(gym.Env):
+    def task(self):
+        return self._task
     def __init__(
         self,
         model_cls: Type[AgentModel],
@@ -344,19 +348,29 @@ class MazeEnv(gym.Env):
         # Samples a new goal
         if self._task.sample_goals():
             self.set_marker()
-        def subtraction(x,y):  #function definifion for subtraction
-            sub=x-y
-            return sub
-        import numpy as np
+        
         xy = [subtraction(i[0], i[1]) for i in zip(self._find_new_robots(), [self._init_torso_x, self._init_torso_y] )]  
         
         self.wrapped_env.set_xy(xy)
         return self._get_obs()
+    
+    def set_start(self, start_i, start_j):
+        xy = [subtraction(i[0], i[1]) for i in zip((start_i, start_j), [self._init_torso_x, self._init_torso_y])]
+        xy = [start_i, start_j]
+        self.wrapped_env.set_xy(xy)
+
+    def set_goal_pos(self, start_i, start_j):
+        from mujoco_maze.maze_task import MazeGoal
+        xy = [subtraction(i[0], i[1]) for i in zip((start_i, start_j), [self._init_torso_x, self._init_torso_y])]
+        xy = [start_i, start_j]
+        self._task.goals[0] = MazeGoal(np.array(xy))
+        self.set_marker()
+
 
     def set_marker(self) -> None:
         for i, goal in enumerate(self._task.goals):
-            idx = self.model.site_name2id(f"goal{i}")
-            self.data.site_xpos[idx][: len(goal.pos)] = goal.pos
+            idx = self.wrapped_env.model.site_name2id(f"goal_site{i}")
+            self.wrapped_env.data.site_xpos[idx][: len(goal.pos)] = goal.pos
 
     @property
     def viewer(self) -> Any:
