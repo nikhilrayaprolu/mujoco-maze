@@ -290,16 +290,25 @@ class GoalReward4Rooms(MazeTask):
     def create_maze() -> List[List[MazeCell]]:
         E, B, R = MazeCell.EMPTY, MazeCell.BLOCK, MazeCell.ROBOT
         return [
-            [B, B, B, B, B, B, B, B, B],
-            [B, E, E, E, B, E, E, E, B],
-            [B, E, E, E, E, E, E, E, B],
-            [B, E, E, E, B, E, E, E, B],
-            [B, B, E, B, B, B, E, B, B],
-            [B, E, E, E, B, E, E, E, B],
-            [B, E, E, E, E, E, E, E, B],
-            [B, R, E, E, B, E, E, E, B],
-            [B, B, B, B, B, B, B, B, B],
+        [B, B, B, B, B],
+        [B, R, E, E, B],
+        [B, B, B, E, B],
+        [B, E, E, E, B],
+        [B, B, B, E, B],
+        [B, E, E, E, B],
+        [B, B, B, B, B],
         ]
+        # return [
+        #     [B, B, B, B, B, B, B, B, B],
+        #     [B, E, E, E, B, E, E, E, B],
+        #     [B, E, E, E, E, E, E, E, B],
+        #     [B, E, E, E, B, E, E, E, B],
+        #     [B, B, E, B, B, B, E, B, B],
+        #     [B, E, E, E, B, E, E, E, B],
+        #     [B, E, E, E, E, E, E, E, B],
+        #     [B, R, E, E, B, E, E, E, B],
+        #     [B, B, B, B, B, B, B, B, B],
+        # ]
 
 
 class DistReward4Rooms(GoalReward4Rooms, DistRewardMixIn):

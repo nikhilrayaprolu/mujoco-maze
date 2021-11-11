@@ -33,7 +33,7 @@ class MazeEnv(gym.Env):
         maze_task: Type[maze_task.MazeTask] = maze_task.MazeTask,
         include_position: bool = True,
         maze_height: float = 0.5,
-        maze_size_scaling: float = 4.0,
+        maze_size_scaling: float = 8.0,
         inner_reward_scaling: float = 1.0,
         restitution_coef: float = 0.8,
         task_kwargs: dict = {},
